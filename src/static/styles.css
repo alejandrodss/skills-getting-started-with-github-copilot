@@ -90,12 +90,15 @@ section h3 {
 
 /* Bulleted list styling */
 .participants ul {
-  list-style: disc;
-  padding-left: 20px;
+  list-style: none; /* hide bullets */
+  padding-left: 0;
   margin-top: 8px;
 }
 
 .participants li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: #ffffff;
   border: 1px solid #f0f0f0;
   padding: 8px 10px;
@@ -104,6 +107,25 @@ section h3 {
   color: #333;
   font-size: 0.93rem;
   box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+}
+
+.participants li span {
+  overflow-wrap: anywhere;
+}
+
+/* delete icon button */
+.participant-delete {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+.participant-delete:hover {
+  background: rgba(198,40,40,0.08);
 }
 
 .form-group {

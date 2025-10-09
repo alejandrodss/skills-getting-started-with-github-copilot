@@ -53,7 +53,39 @@ document.addEventListener("DOMContentLoaded", () => {
           const ul = document.createElement("ul");
           details.participants.forEach((p) => {
             const li = document.createElement("li");
-            li.textContent = p;
+            // participant email
+            const span = document.createElement("span");
+            span.textContent = p;
+
+            // delete button (unicode trash can)
+            const del = document.createElement("button");
+            del.className = "participant-delete";
+            del.title = `Unregister ${p}`;
+            del.innerHTML = "\u{1F5D1}"; // 🗑
+            del.addEventListener("click", async () => {
+              // call DELETE endpoint to unregister participant
+              try {
+                const res = await fetch(
+                  `/activities/${encodeURIComponent(name)}/participants?email=${encodeURIComponent(p)}`,
+                  { method: "DELETE" }
+                );
+
+                const result = await res.json();
+                if (res.ok) {
+                  // reload activities to reflect change
+                  fetchActivities();
+                } else {
+                  console.error("Failed to unregister:", result);
+                  alert(result.detail || result.message || "Failed to unregister participant");
+                }
+              } catch (err) {
+                console.error("Error unregistering participant:", err);
+                alert("Failed to unregister participant. Please try again.");
+              }
+            });
+
+            li.appendChild(span);
+            li.appendChild(del);
             ul.appendChild(li);
           });
           participantsSection.appendChild(ul);
@@ -101,6 +133,8 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        // Refresh activities so the new participant appears immediately
+        fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
